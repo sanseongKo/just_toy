@@ -22,11 +22,4 @@ public class MemberController {
 
         return memberService.login(memberId, password);
     }
-
-    @PostMapping("/test")
-    public void test(
-            @RequestHeader String authorization
-    ) {
-        log.info(authorization);
-    }
 }
