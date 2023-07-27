@@ -36,7 +36,7 @@ public class Member implements UserDetails {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Member(String memberId, String password, Role role) {
+    private Member(String memberId, String password, Role role) {
         this.memberId = memberId;
         this.password = password;
         this.roles.add(role);
