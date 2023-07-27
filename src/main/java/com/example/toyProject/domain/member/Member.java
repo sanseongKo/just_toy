@@ -1,5 +1,6 @@
 package com.example.toyProject.domain.member;
 
+import com.example.toyProject.domain.member.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,23 +42,10 @@ public class Member implements UserDetails {
         this.roles.add(role);
     }
 
-    private enum Role {
-        PLAYER("player"), MANAGER("manager");
-
-        private final String role;
-        Role(String role) {
-            this.role = role;
-        }
-
-        public String getRole() {
-            return role;
-        }
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.role))
+                .map(role -> new SimpleGrantedAuthority(role.getRole()))
                 .collect(Collectors.toList());
     }
 
