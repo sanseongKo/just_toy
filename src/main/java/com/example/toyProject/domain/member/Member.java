@@ -29,16 +29,16 @@ public class Member implements UserDetails {
 
     private LocalDateTime updatedAt;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    @Enumerated
+    private List<Role> roles = new ArrayList<>();
+
     @Builder
     private Member(String memberId, String password) {
         this.memberId = memberId;
         this.password = password;
     }
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    @Enumerated
-    private List<Role> roles = new ArrayList<>();
 
     public Member() {
 
