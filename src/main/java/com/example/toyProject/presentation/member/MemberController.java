@@ -18,9 +18,15 @@ public class MemberController {
 
     @PostMapping("/login")
     public TokenInfo login(@RequestBody LoginRequestBody loginRequestBody) {
-        String memberId = loginRequestBody.getMemberId();
-        String password = loginRequestBody.getPassword();
+        String memberId = loginRequestBody.memberId();
+        String password = loginRequestBody.password();
 
         return memberService.login(memberId, password);
+    }
+
+    @PostMapping("/signup")
+    public String signup(@RequestBody SignupRequestBody signupRequestBody) {
+        return memberService.signup(signupRequestBody.memberId(), signupRequestBody.password())
+                .getMemberId();
     }
 }
