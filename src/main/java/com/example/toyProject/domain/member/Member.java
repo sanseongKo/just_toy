@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 public class Member implements UserDetails {
@@ -26,19 +25,26 @@ public class Member implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    private LocalDate createdAt = LocalDate.now();
+
+    private LocalDateTime updatedAt;
+
+    @Builder
+    private Member(String memberId, String password) {
+        this.memberId = memberId;
+        this.password = password;
+    }
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     @Enumerated
     private List<Role> roles = new ArrayList<>();
 
-    private LocalDate createdAt;
+    public Member() {
 
-    private LocalDateTime updatedAt;
+    }
 
-    @Builder
-    private Member(String memberId, String password, Role role) {
-        this.memberId = memberId;
-        this.password = password;
+    public void addRole(Role role) {
         this.roles.add(role);
     }
 
