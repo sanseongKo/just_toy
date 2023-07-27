@@ -1,5 +1,7 @@
 package com.example.toyProject.application.member;
 
+import com.example.toyProject.domain.member.Member;
+import com.example.toyProject.domain.member.role.Role;
 import com.example.toyProject.repository.member.MemberRepository;
 import com.example.toyProject.config.security.jwt.JwtProvider;
 import com.example.toyProject.config.security.jwt.TokenInfo;
@@ -24,5 +26,18 @@ public class MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         return jwtProvider.generateToken(authentication);
+    }
+
+    public Member signup(String memberId, String password) {
+        Member member = Member.builder()
+                .memberId(memberId)
+                .password(password)
+                .build();
+
+        member.addRole(Role.PLAYER);
+
+        memberRepository.save(member);
+
+        return member;
     }
 }
