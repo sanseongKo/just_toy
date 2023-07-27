@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
@@ -28,16 +27,37 @@ public class Member implements UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    @Enumerated
+    private List<Role> roles = new ArrayList<>();
 
     private LocalDate createdAt;
 
     private LocalDateTime updatedAt;
 
+    @Builder
+    public Member(String memberId, String password, Role role) {
+        this.memberId = memberId;
+        this.password = password;
+        this.roles.add(role);
+    }
+
+    private enum Role {
+        PLAYER("player"), MANAGER("manager");
+
+        private final String role;
+        Role(String role) {
+            this.role = role;
+        }
+
+        public String getRole() {
+            return role;
+        }
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
+                .map(role -> new SimpleGrantedAuthority(role.role))
                 .collect(Collectors.toList());
     }
 
