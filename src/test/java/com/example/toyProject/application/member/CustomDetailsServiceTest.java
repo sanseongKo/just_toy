@@ -9,16 +9,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CustomDetailsServiceTest {
+    String username = "sanseong";
+
     private CustomDetailsService customDetailsService;
     @Mock
     private MemberRepository memberRepository;
@@ -31,15 +35,31 @@ class CustomDetailsServiceTest {
 
     @DisplayName("회원이 아니라면 에러가 발생한다.")
     @Test
-    void loadUserTest() {
-        String username = "sanseong";
+    void loadUserExceptionTest() {
         Optional<Member> mockResult = Optional.empty();
 
         when(memberRepository.findByMemberId(username)).thenReturn(mockResult).getMock();
 
-        Assertions.assertThatThrownBy(() ->
+        assertThatThrownBy(() ->
                 customDetailsService.loadUserByUsername(username))
                 .isInstanceOf(UsernameNotFoundException.class);
+    }
+
+    @DisplayName("회원이라면 회원 정보가 리턴 되어야 한다")
+    @Test
+    void loadUserTest() {
+        Optional<Member> member = Optional.of(
+                Member.builder()
+                .memberId(username)
+                .password("1234")
+                .build()
+        );
+
+        when(memberRepository.findByMemberId(username)).thenReturn(member);
+
+        UserDetails userDetails = customDetailsService.loadUserByUsername(username);
+
+        assertThat(userDetails.getUsername()).isEqualTo(username);
     }
 
 }
