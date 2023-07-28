@@ -34,8 +34,8 @@ dependencies {
 	testAnnotationProcessor("org.projectlombok:lombok")
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.1.0")
-
-
+	// https://mvnrepository.com/artifact/org.springframework/spring-mock
+	testImplementation ("org.springframework:spring-mock:2.0.8")
 }
 
 tasks.withType<Test> {
