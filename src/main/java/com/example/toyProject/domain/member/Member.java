@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 public class Member implements UserDetails {
     @Id
@@ -31,7 +30,7 @@ public class Member implements UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private List<Role> roles = new ArrayList<>();
 
     @Builder
